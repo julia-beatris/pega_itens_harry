@@ -2,6 +2,7 @@ import pygame
 from classe_jogador import Jogador
 from classe_frutas import Frutas
 from classe_inimigo import Inimigo
+from classe_bonus import Bonus
 pygame.init()
 
 clock = pygame.time.Clock()
@@ -37,8 +38,15 @@ lista_frutas = [Frutas(pygame.image.load("src/img/fruta_1.jpg")),
                 Frutas(pygame.image.load("src/img/fruta_6.jpg"))]
     
 #colocando o inimigo 
-lista_inimigo = [Inimigo(pygame.image.load("src/img/fruta_1.jpg"))]
+lista_inimigo = [Inimigo(pygame.image.load("src/img/cobra_inimigo.jpg")),
+                 Inimigo(pygame.image.load("src/img/cobra_inimigo.jpg")),
+                 Inimigo(pygame.image.load("src/img/cobra_inimigo.jpg"))]
 
+#colocando o bonus 
+
+lista_bonus = [Bonus(pygame.image.load("src/img/salva_vidas.jpg")),
+               Bonus(pygame.image.load("src/img/salva_vidas.jpg")),
+               Bonus(pygame.image.load("src/img/salva_vidas.jpg")),]
 #contadores
 morte = 0 
 contador_ganhou = 0
@@ -71,17 +79,22 @@ while rodando:
         #tela.blit(texto_pontos,(450,10))
         #colocando a harry
         mini_harry.andar(tecla_pressionada)
-        mini_harry.exibir(capa)
+        mini_harry.exibir(tela)
 
         #colocando o inimigo 
         for inimigo in lista_inimigo:
             inimigo.andar()
-            inimigo.exibir(capa)
+            inimigo.exibir(tela)
 
         #colocando as frutas  
         for frutas in lista_frutas:
             frutas.andar()
-            frutas.exibir(capa)
+            frutas.exibir(tela)
+
+        #colocando o bonus  
+        for bonus in lista_bonus:
+            bonus.andar()
+            bonus.exibir(tela)
 
     pygame.display.update() 
     clock.tick(60)
