@@ -43,17 +43,25 @@ lista_inimigo = [Inimigo(pygame.image.load("src/img/cobra_inimigo.jpg")),
                  Inimigo(pygame.image.load("src/img/cobra_inimigo.jpg"))]
 
 #colocando o bonus 
-
 lista_bonus = [Bonus(pygame.image.load("src/img/salva_vidas.jpg")),
                Bonus(pygame.image.load("src/img/salva_vidas.jpg")),
                Bonus(pygame.image.load("src/img/salva_vidas.jpg")),]
+
+
+
+fonte_texto = pygame.font.SysFont("arial",24,True)
+fonte_textop = pygame.font.SysFont("arial",24,True)
+
+
+
 #contadores
-morte = 0 
-contador_ganhou = 0
+contador_pontos = 0 
+contador_mortes = 0 
 status_jogo = "INICIO"
 
 rodando = True
 while rodando:
+
     tecla_pressionada = pygame.key.get_pressed()#retorna a tecla que eu estou pressionando
      #Pego todos os eventos que aconteceu na janela 
     lista_eventos = pygame.event.get()
@@ -62,7 +70,6 @@ while rodando:
         #Se um dos eventos for ter clicado no X eu encerro o programa 
         if evento.type == pygame.QUIT:
             rodando = False
-
 
     if status_jogo == "INICIO":
         tela.blit(capa,(0,0))
@@ -73,10 +80,12 @@ while rodando:
     if status_jogo == "JOGANDO":
         #inserindo a imagem        
         tela.blit(jardim,(0,0))
-        #texto_morte = fonte_texto.render(f"MORTES:{morte}",False,[0,0,0]) 
-        #tela.blit(texto_morte,(600,10))
-        #texto_pontos = fonte_texto.render(f"PONTOS:{contador_ganhou}",False,[0,0,0])
-        #tela.blit(texto_pontos,(450,10))
+        texto_morte = fonte_texto.render(f"MORTES:{contador_mortes}",False,[0,0,0]) 
+        tela.blit(texto_morte,(600,10))
+        texto_pontos = fonte_texto.render(f"PONTOS:{contador_pontos}",False,[0,0,0])
+        tela.blit(texto_pontos,(450,10))
+
+
         #colocando a harry
         mini_harry.andar(tecla_pressionada)
         mini_harry.exibir(tela)
@@ -86,15 +95,50 @@ while rodando:
             inimigo.andar()
             inimigo.exibir(tela)
 
-        #colocando as frutas  
-        for frutas in lista_frutas:
-            frutas.andar()
-            frutas.exibir(tela)
-
         #colocando o bonus  
         for bonus in lista_bonus:
             bonus.andar()
             bonus.exibir(tela)
+
+        #frutas dando certo 
+        for frutas in lista_frutas:
+            frutas.andar()
+            frutas.exibir(tela)
+            if frutas.mascara2.overlap(mini_harry.mascara,(mini_harry.pos_x-frutas.pos_frutas_x,mini_harry.pos_y-frutas.pos_frutas_y)):
+                contador_pontos = contador_pontos + 1
+                frutas.voltar()
+
+        #inimigo funcionando
+        for inimigo in lista_inimigo:
+            inimigo.andar()
+            inimigo.exibir(tela)
+            if  inimigo.mascara3.overlap(mini_harry.mascara,(mini_harry.pos_x-inimigo.pos_inimigo_x,mini_harry.pos_y-inimigo.pos_inimigo_y)):
+                contador_mortes = contador_mortes + 1
+                inimigo.voltar()
+        if contador_mortes == 5 :
+            status_jogo = "FIM"
+
+        if status_jogo == "FIM" :
+            tela.blit(capa_perda,(0,0))
+            if tecla_pressionada[pygame.K_RETURN] or tecla_pressionada[pygame.K_KP_ENTER] :
+                contador_mortes = 0 
+                contador_pontos = 0 
+                status_jogo = "JOGANDO"
+                
+        #bonus funcionando
+        for bonus in lista_bonus:
+            bonus.andar()
+            bonus.exibir(tela)
+            if  bonus.mascara4.overlap(mini_harry.mascara,(mini_harry.pos_x-bonus.pos_bonus_x,mini_harry.pos_y-bonus.pos_bonus_y)):
+                contador_pontos = contador_pontos + 3
+                bonus.voltar()
+
+            if tecla_pressionada[pygame.K_SPACE]  :
+                bonus.pos_bonus_x,bonus.pos_bonus_y = mini_harry.pos_x,mini_harry.pos_y
+                poder = True
+                if  bonus.mascara4.overlap(mini_harry.mascara,(mini_harry.pos_x-bonus.pos_bonus_x,mini_harry.pos_y-bonus.pos_bonus_y)):
+                    contador_pontos =+ 3
+                    bonus.voltar()
 
     pygame.display.update() 
     clock.tick(60)
