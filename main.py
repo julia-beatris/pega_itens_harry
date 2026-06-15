@@ -52,7 +52,8 @@ lista_bonus = [Bonus(pygame.image.load("src/img/salva_vidas.jpg")),
 fonte_texto = pygame.font.SysFont("arial",24,True)
 fonte_textop = pygame.font.SysFont("arial",24,True)
 
-
+som_itens= pygame.mixer.Sound("src/som/som_itens.mp3")
+som_cobra= pygame.mixer.Sound("src/som/som_cobra.mp3")
 
 #contadores
 contador_pontos = 0 
@@ -107,6 +108,7 @@ while rodando:
             frutas.exibir(tela)
             if frutas.mascara2.overlap(mini_harry.mascara,(mini_harry.pos_x-frutas.pos_frutas_x,mini_harry.pos_y-frutas.pos_frutas_y)):
                 contador_pontos = contador_pontos + 1
+                som_itens.play()
                 frutas.voltar()
 
         #inimigo funcionando
@@ -115,6 +117,7 @@ while rodando:
             inimigo.exibir(tela)
             if  inimigo.mascara3.overlap(mini_harry.mascara,(mini_harry.pos_x-inimigo.pos_inimigo_x,mini_harry.pos_y-inimigo.pos_inimigo_y)):
                 contador_mortes = contador_mortes + 1
+                som_cobra.play()
                 inimigo.voltar()
         if contador_mortes == 5 :
             status_jogo = "FIM"
@@ -132,6 +135,7 @@ while rodando:
             bonus.exibir(tela)
             if  bonus.mascara4.overlap(mini_harry.mascara,(mini_harry.pos_x-bonus.pos_bonus_x,mini_harry.pos_y-bonus.pos_bonus_y)):
                 contador_pontos = contador_pontos + 3
+                som_itens.play()
                 bonus.voltar()
 
             if tecla_pressionada[pygame.K_SPACE] :
