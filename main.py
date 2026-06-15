@@ -86,6 +86,7 @@ while rodando:
         tela.blit(texto_pontos,(450,10))
 
 
+
         #colocando a harry
         mini_harry.andar(tecla_pressionada)
         mini_harry.exibir(tela)
@@ -133,13 +134,30 @@ while rodando:
                 contador_pontos = contador_pontos + 3
                 bonus.voltar()
 
-            if tecla_pressionada[pygame.K_SPACE]  :
+            if tecla_pressionada[pygame.K_SPACE] :
                 bonus.pos_bonus_x,bonus.pos_bonus_y = mini_harry.pos_x,mini_harry.pos_y
                 poder = True
                 if  bonus.mascara4.overlap(mini_harry.mascara,(mini_harry.pos_x-bonus.pos_bonus_x,mini_harry.pos_y-bonus.pos_bonus_y)):
                     contador_pontos =+ 3
                     bonus.voltar()
+                    
 
+    
+    if status_jogo == "FIM":
+        tela.blit(capa_perda,(0,0))
+        if tecla_pressionada[pygame.K_RETURN] or tecla_pressionada[pygame.K_KP_ENTER]:
+            status_jogo = "INICIO"
+            contador_pontos = 0
+            contador_mortes = 0 
+
+    if contador_pontos == 20:
+        status_jogo = "FIM"
+        tela.blit(capa_vitoria,(0,0))
+        if tecla_pressionada[pygame.K_RETURN] or tecla_pressionada[pygame.K_KP_ENTER]:
+            status_jogo = "INICIO"
+            contador_pontos = 0 
+            contador_mortes = 0 
+            
     pygame.display.update() 
     clock.tick(60)
 
