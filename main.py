@@ -1,5 +1,5 @@
 import pygame 
-from classe_jogador import Jogador
+from classe_harry import Jogador
 from classe_frutas import Frutas
 from classe_inimigo import Inimigo
 from classe_bonus import Bonus
@@ -104,7 +104,7 @@ while rodando:
     
         #colocando a harry
         mini_harry.andar(tecla_pressionada)
-        mini_harry.exibir(tela)
+        mini_harry.mostrar(tela)
 
         #Verifica se ele apertou espaço
         if tecla_pressionada[pygame.K_SPACE] and not poder_ativo:
@@ -193,6 +193,7 @@ while rodando:
             status_jogo = "INICIO"
             contador_pontos = 0
             contador_mortes = 0 
+            mini_harry.voltar()
 
     if contador_pontos == 20:
         status_jogo = "FIM"
@@ -201,6 +202,7 @@ while rodando:
             status_jogo = "INICIO"
             contador_pontos = 0 
             contador_mortes = 0 
+            mini_harry.voltar()
             
     pygame.display.update() 
     clock.tick(60)
