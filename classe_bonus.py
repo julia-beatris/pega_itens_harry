@@ -11,10 +11,14 @@ class Bonus:
         self.pos_bonus_y = 0
         lista_lugares= [300,400,500,600,700,800,900,100]
         self.pos_bonus_x = random.choice(lista_lugares)
-        self.velocidade = random.randint(4,5)
+        self.velocidade_y = random.randint(4,5)
+        self.velocidade_x = 0 #Não tem velocidade horizontal, mas será utilizado para o poder magnetismo
+
+
 
     def andar(self):
-        self.pos_bonus_y += self.velocidade
+        self.pos_bonus_y += self.velocidade_y
+        self.pos_bonus_y += self.velocidade_x
         if self.pos_bonus_y > 1200:
             self.voltar()
 
@@ -25,4 +29,4 @@ class Bonus:
         self.pos_bonus_y = 0
         lista_lugares= [300,400,500,600,700,800,900,100]
         self.pos_bonus_x = random.choice(lista_lugares)
-        self.velocidade = random.randint(4,5)
+        self.velocidade_y = random.randint(4,5)

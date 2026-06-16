@@ -1,8 +1,8 @@
 import pygame 
-
+from caminhos_relativos import resource_path
 class Jogador:
     def __init__(self):
-        self.imagem = pygame.image.load("src/img/mini_harry.png")
+        self.imagem = pygame.image.load(resource_path("src/img/mini_harry.png"))
         self.imagem =  pygame.transform.scale_by(self.imagem,0.4)
         self.pos_x = 460
         self.pos_y = 550
