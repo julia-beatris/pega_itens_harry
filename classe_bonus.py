@@ -18,7 +18,7 @@ class Bonus:
 
     def andar(self):
         self.pos_bonus_y += self.velocidade_y
-        self.pos_bonus_y += self.velocidade_x
+        self.pos_bonus_x += self.velocidade_x
         if self.pos_bonus_y > 1200:
             self.voltar()
 

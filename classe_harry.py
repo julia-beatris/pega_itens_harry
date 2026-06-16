@@ -1,11 +1,11 @@
 import pygame
-
+from caminhos_relativos import resource_path
 class Jogador:
 
     def __init__(self):
-        self.lista_sprites = [pygame.image.load("src/img/harry01.png"),
-                         pygame.image.load("src/img/harry02.png"),
-                         pygame.image.load("src/img/harry03.png")]
+        self.lista_sprites = [pygame.image.load("src/img/harry/harry01.png"),
+                         pygame.image.load("src/img/harry/harry02.png"),
+                         pygame.image.load("src/img/harry/harry03.png")]
         
         contador =0
         for sprite in self.lista_sprites:
@@ -22,6 +22,8 @@ class Jogador:
         self.velocidade = 8
 
         self.mascara = pygame.mask.from_surface(self.imagem)
+        self.som = pygame.mixer.Sound(resource_path("src/som/harrymusic.mp3"))
+        self.som2 = pygame.mixer.Sound(resource_path("src/som/harrymusicaperdeu.mp3"))
     
 
     def andar(self, teclas_pressionadas):
@@ -45,7 +47,19 @@ class Jogador:
                 
     def mostrar(self, tela):
         tela.blit(self.imagem,(self.pos_x,self.pos_y))
-        
+
     def voltar(self):
         self.pos_x = 0
         self.pos_y = 586
+
+    def som_fundo (self,menu):
+        if menu:
+            self.som.play()
+        else:
+            self.som.stop()
+
+    def som_perda (self,menu):
+        if menu:
+            self.som2.play()
+        else:
+            self.som2.stop()

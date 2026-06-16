@@ -15,38 +15,41 @@ tela = pygame.display.set_mode((1200,700))
 pygame.display.set_caption("Beco das Frutas")
 
 #colocando a tela de inicio 
-capa = pygame.image.load(resource_path("src/img/capa_inicio.jpg"))
+capa = pygame.image.load(resource_path("src/img/capas/CAPA_INICIO.jpg"))
 capa = pygame.transform.scale(capa,(1200,700))
 #colocando o jardim (tela de fundo)
-jardim = pygame.image.load(resource_path("src/img/fundo_jradim.jpg"))
+jardim = pygame.image.load(resource_path("src/img/capas/fundo_jradim.jpg"))
 jardim = pygame.transform.scale(jardim,(1200,700))
 #tela de vitoria
-capa_vitoria = pygame.image.load(resource_path("src/img/capa_vitoria.jpg"))
+capa_vitoria = pygame.image.load(resource_path("src/img/capas/capa_vitoria.jpg"))
 capa_vitoria = pygame.transform.scale(capa_vitoria,(1200,700))
 #tela de game over
-capa_perda = pygame.image.load(resource_path("src/img/capa_perdeu.jpg"))
+capa_perda = pygame.image.load(resource_path("src/img/capas/capa_perdeu.jpg"))
 capa_perda = pygame.transform.scale(capa_perda,(1200,700))
+#tela de pause 
+pause = pygame.image.load(resource_path("src/img/capas/pause_jogo.jpg"))
+pause = pygame.transform.scale(pause,(1200,700))
 
 #criando o jogador 
 mini_harry = Jogador()
 
 #colocando as frutas 
-lista_frutas = [Frutas(pygame.image.load(resource_path("src/img/fruta_1.jpg"))),
-                Frutas(pygame.image.load(resource_path("src/img/fruta_2.jpg"))),
-                Frutas(pygame.image.load(resource_path("src/img/fruta_3.jpg"))),
-                Frutas(pygame.image.load(resource_path("src/img/fruta_4.jpg"))),
-                Frutas(pygame.image.load(resource_path("src/img/fruta_5.jpg"))),
-                Frutas(pygame.image.load(resource_path("src/img/fruta_6.jpg")))]
+lista_frutas = [Frutas(pygame.image.load(resource_path("src/img/frutas e inimigo/fruta_1.jpg"))),
+                Frutas(pygame.image.load(resource_path("src/img/frutas e inimigo/fruta_2.jpg"))),
+                Frutas(pygame.image.load(resource_path("src/img/frutas e inimigo/fruta_3.jpg"))),
+                Frutas(pygame.image.load(resource_path("src/img/frutas e inimigo/fruta_4.jpg"))),
+                Frutas(pygame.image.load(resource_path("src/img/frutas e inimigo/fruta_5.jpg"))),
+                Frutas(pygame.image.load(resource_path("src/img/frutas e inimigo/fruta_6.jpg")))]
     
 #colocando o inimigo 
-lista_inimigo = [Inimigo(pygame.image.load(resource_path("src/img/cobra_inimigo.jpg"))),
-                 Inimigo(pygame.image.load(resource_path("src/img/cobra_inimigo.jpg"))),
-                 Inimigo(pygame.image.load(resource_path("src/img/cobra_inimigo.jpg")))]
+lista_inimigo = [Inimigo(pygame.image.load(resource_path("src/img/frutas e inimigo/cobra_inimigo.jpg"))),
+                 Inimigo(pygame.image.load(resource_path("src/img/frutas e inimigo/cobra_inimigo.jpg"))),
+                 Inimigo(pygame.image.load(resource_path("src/img/frutas e inimigo/cobra_inimigo.jpg")))]
 
 #colocando o bonus 
-lista_bonus = [Bonus(pygame.image.load(resource_path("src/img/salva_vidas.jpg"))),
-               Bonus(pygame.image.load(resource_path("src/img/salva_vidas.jpg"))),
-               Bonus(pygame.image.load(resource_path("src/img/salva_vidas.jpg"))),]
+lista_bonus = [Bonus(pygame.image.load(resource_path("src/img/frutas e inimigo/salva_vidas.jpg"))),
+               Bonus(pygame.image.load(resource_path("src/img/frutas e inimigo/salva_vidas.jpg"))),
+               Bonus(pygame.image.load(resource_path("src/img/frutas e inimigo/salva_vidas.jpg"))),]
 
 
 
@@ -55,6 +58,7 @@ fonte_textop = pygame.font.SysFont("arial",24,True)
 
 som_itens= pygame.mixer.Sound(resource_path("src/som/som_itens.mp3"))
 som_cobra= pygame.mixer.Sound(resource_path("src/som/som_cobra.mp3"))
+
 
 ###### Variaveis para o controlar a duração do poder #########
 tempo_inicio_poder = 0
@@ -86,8 +90,10 @@ while rodando:
 
     if status_jogo == "INICIO":
         tela.blit(capa,(0,0))
+        mini_harry.som_fundo(True)
         if tecla_pressionada[pygame.K_RETURN] or tecla_pressionada[pygame.K_KP_ENTER]:
             status_jogo = "JOGANDO"
+            mini_harry.som_fundo(False)
 
 
     if status_jogo == "JOGANDO":
@@ -121,6 +127,12 @@ while rodando:
                 for bonus in lista_bonus: 
                     bonus.velocidade_x = 0
 
+        if contador_pontos >= 100:
+            status_jogo = "FIM VENCER"
+
+        if tecla_pressionada[pygame.K_q]:
+            status_jogo = "PAUSE"
+
         #colocando o inimigo 
         for inimigo in lista_inimigo:
             inimigo.andar()
@@ -131,8 +143,6 @@ while rodando:
             bonus.andar()
             bonus.exibir(tela)
             #Movimentando os bonus
-
-        for bonus in lista_bonus:
             if poder_ativo == True:
                 offset_x = mini_harry.pos_x - bonus.pos_bonus_x
                 offset_y = mini_harry.pos_y - bonus.pos_bonus_y
@@ -189,20 +199,30 @@ while rodando:
     
     if status_jogo == "FIM":
         tela.blit(capa_perda,(0,0))
+        mini_harry.som_perda(True)
         if tecla_pressionada[pygame.K_RETURN] or tecla_pressionada[pygame.K_KP_ENTER]:
+            mini_harry.som_perda(False)
             status_jogo = "INICIO"
             contador_pontos = 0
             contador_mortes = 0 
             mini_harry.voltar()
 
-    if contador_pontos == 20:
-        status_jogo = "FIM"
+    if status_jogo == "FIM VENCER":
         tela.blit(capa_vitoria,(0,0))
+        mini_harry.som_fundo(True)
         if tecla_pressionada[pygame.K_RETURN] or tecla_pressionada[pygame.K_KP_ENTER]:
+            mini_harry.som_fundo(False)
             status_jogo = "INICIO"
             contador_pontos = 0 
             contador_mortes = 0 
             mini_harry.voltar()
+
+    if status_jogo == "PAUSE":
+        tela.blit(pause,(0,0))
+        mini_harry.som_fundo(True)
+        if tecla_pressionada[pygame.K_RETURN] or tecla_pressionada[pygame.K_KP_ENTER]:
+            mini_harry.som_fundo(False)
+            status_jogo = "JOGANDO"
             
     pygame.display.update() 
     clock.tick(60)
